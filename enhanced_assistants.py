@@ -6,15 +6,15 @@ import re
 
 ##### Inputs #####
 existing_thread_ids = {
-    'P': asst_hvLbGa4GohMd2rxb7pDpdZHW,  # Replace None with the thread ID for P if available
-    'E': asst_m24b8ktUodoxk2DSFBLcLCMm,  # Replace None with the thread ID for E if available
-    'T': asst_ROvTfKSBWVWME9jt4VJYx7oa   # Replace None with the thread ID for T if available
+    'P': "asst_hvLbGa4GohMd2rxb7pDpdZHW",  # Replace None with the thread ID for P if available
+    'E': "asst_m24b8ktUodoxk2DSFBLcLCMm",  # Replace None with the thread ID for E if available
+    'T': "asst_ROvTfKSBWVWME9jt4VJYx7oa"   # Replace None with the thread ID for T if available
 }
 
 existing_assistant_ids = {
-    'P': thread_N6auuup3gy39g0gMCoxt2Fmo,  # Replace None with the assistant ID for P if available
-    'E': thread_mvL9jXpdwqkPv5NytWQgcI2S,  # Replace None with the assistant ID for E if available
-    'T': thread_Z7ZGb55Yww1GH3uJH6MFA5xb   # Replace None with the assistant ID for T if available
+    'P': "thread_N6auuup3gy39g0gMCoxt2Fmo",  # Replace None with the assistant ID for P if available
+    'E': "thread_mvL9jXpdwqkPv5NytWQgcI2S",  # Replace None with the assistant ID for E if available
+    'T': "thread_Z7ZGb55Yww1GH3uJH6MFA5xb"   # Replace None with the assistant ID for T if available
 }
 
 input_prompt = """
@@ -26,7 +26,7 @@ client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
 
-if !existing_assistant_ids.get(P):
+if not existing_assistant_ids.get('P'):
     # Create assistants for each agent
     assistant_p = client.beta.assistants.create(
         name="P",
@@ -41,9 +41,9 @@ if !existing_assistant_ids.get(P):
         Additionally, don't ever tell anyone you will wait for them to get back to you. Always ensure you are specifically asking them to give a response to you.
         If E is giving general status updates, do not encourage this. Tell him to stop messaging you, and instead write code and send it to T.""",
         model="gpt-4-1106-preview"
-    )
+    ).id
 
-if !existing_assistant_ids.get(E):
+if not existing_assistant_ids.get('E'):
     assistant_e = client.beta.assistants.create(
         name="E",
         instructions="""You are a phenomenal senior engineer, capable of designing, architecting, and coding robust and optimized solutions.
@@ -67,10 +67,10 @@ if !existing_assistant_ids.get(E):
         It is a requirement of our systems that you keep the conversation going, so you must always ultimately send information to either T or P in your response.
         Additionally, don't ever tell anyone you will wait for them to get back to you. Always ensure you are specifically asking them to give a response to you.""",
         model="gpt-4-1106-preview"
-    )
+    ).id
 
 
-if !existing_assistant_ids.get(T):
+if not existing_assistant_ids.get('T'):
     assistant_t = client.beta.assistants.create(
         name="T",
         instructions="""You are a phenomenal senior engineer, focused on testing.
@@ -88,21 +88,21 @@ if !existing_assistant_ids.get(T):
         If E asks you to test something but doesn't send you the code, remind him to send you the code.""",
         tools=[{"type": "code_interpreter"}],
         model="gpt-4-1106-preview"
-    )
+    ).id
 
 
 # Create a thread for the conversation
-if !existing_thread_ids.get(P):
-    thread_p = client.beta.threads.create()
+if not existing_thread_ids.get('P'):
+    thread_p = client.beta.threads.create().id
 
-if !existing_assistant_ids.get(E):
-    thread_e = client.beta.threads.create()
+if not existing_thread_ids.get('E'):
+    thread_e = client.beta.threads.create().id
 
-if !existing_assistant_ids.get(T):
-    thread_t = client.beta.threads.create()
+if not existing_thread_ids.get('T'):
+    thread_t = client.beta.threads.create().id
 
-print(assistant_p.id, assistant_e.id, assistant_t.id)
-print(thread_p.id, thread_e.id, thread_t.id)
+# print(assistant_p.id, assistant_e.id, assistant_t.id)
+# print(thread_p.id, thread_e.id, thread_t.id)
 
 # Function to create a message in the thread and get a response
 def send_message_and_get_response(thread_id, assistant_id, content):
@@ -186,7 +186,7 @@ current_thread = thread_p
 message_content = input_prompt
 
 while current_agent != "K":
-    response = send_message_and_get_response(current_thread.id, current_agent.id, message_content)
+    response = send_message_and_get_response(current_thread, current_agent, message_content)
     print_conversation(current_agent.name, response)
 
     # Update for next message
