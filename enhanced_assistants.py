@@ -5,17 +5,14 @@ import re
 
 
 ##### Inputs #####
-existing_thread_ids = {
-    'P': "asst_hvLbGa4GohMd2rxb7pDpdZHW",  # Replace None with the thread ID for P if available
-    'E': "asst_m24b8ktUodoxk2DSFBLcLCMm",  # Replace None with the thread ID for E if available
-    'T': "asst_ROvTfKSBWVWME9jt4VJYx7oa"   # Replace None with the thread ID for T if available
-}
 
-existing_assistant_ids = {
-    'P': "thread_N6auuup3gy39g0gMCoxt2Fmo",  # Replace None with the assistant ID for P if available
-    'E': "thread_mvL9jXpdwqkPv5NytWQgcI2S",  # Replace None with the assistant ID for E if available
-    'T': "thread_Z7ZGb55Yww1GH3uJH6MFA5xb"   # Replace None with the assistant ID for T if available
-}
+assistant_p = "asst_hvLbGa4GohMd2rxb7pDpdZHW"
+assistant_e = "asst_m24b8ktUodoxk2DSFBLcLCMm"
+assistant_t = "asst_ROvTfKSBWVWME9jt4VJYx7oa"
+
+thread_p = "thread_N6auuup3gy39g0gMCoxt2Fmo"
+thread_e = "thread_mvL9jXpdwqkPv5NytWQgcI2S"
+thread_t = "thread_Z7ZGb55Yww1GH3uJH6MFA5xb"
 
 input_prompt = """
 Can you update the UI so that all of the CLI functions can now be done in the UI instead?"""
@@ -26,7 +23,7 @@ client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
 
-if not existing_assistant_ids.get('P'):
+if not assistant_p:
     # Create assistants for each agent
     assistant_p = client.beta.assistants.create(
         name="P",
@@ -43,7 +40,7 @@ if not existing_assistant_ids.get('P'):
         model="gpt-4-1106-preview"
     ).id
 
-if not existing_assistant_ids.get('E'):
+if not assistant_e:
     assistant_e = client.beta.assistants.create(
         name="E",
         instructions="""You are a phenomenal senior engineer, capable of designing, architecting, and coding robust and optimized solutions.
@@ -70,7 +67,7 @@ if not existing_assistant_ids.get('E'):
     ).id
 
 
-if not existing_assistant_ids.get('T'):
+if not assistant_t:
     assistant_t = client.beta.assistants.create(
         name="T",
         instructions="""You are a phenomenal senior engineer, focused on testing.
@@ -92,17 +89,17 @@ if not existing_assistant_ids.get('T'):
 
 
 # Create a thread for the conversation
-if not existing_thread_ids.get('P'):
+if not thread_p:
     thread_p = client.beta.threads.create().id
 
-if not existing_thread_ids.get('E'):
+if not thread_e:
     thread_e = client.beta.threads.create().id
 
-if not existing_thread_ids.get('T'):
+if not thread_t:
     thread_t = client.beta.threads.create().id
 
-# print(assistant_p.id, assistant_e.id, assistant_t.id)
-# print(thread_p.id, thread_e.id, thread_t.id)
+# print(assistant_p, assistant_e, assistant_t)
+# print(thread_p, thread_e, thread_t)
 
 # Function to create a message in the thread and get a response
 def send_message_and_get_response(thread_id, assistant_id, content):
