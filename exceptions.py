@@ -1,0 +1,2 @@
+class DeliveryMessageException(Exception):
+    pass
