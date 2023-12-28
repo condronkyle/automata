@@ -151,7 +151,7 @@ def determine_target_agent(message, agent, thread):
     elif '[To K]' in message:
         return 'K', 'K', extract_delivery_message(message)
     else:
-        return agent, thread, "<your own internal monologue>: Continue. And remember, you must always end your response with a message to your teammates."
+        return agent, thread, "<your own internal monologue>: Continue. And remember, you must always end your response with a message to your teammates by using [To <X>]."
         # TODO: Logic to re-prompt for more info
 
 
@@ -184,7 +184,7 @@ message_content = input_prompt
 
 while current_agent != "K":
     response = send_message_and_get_response(current_thread, current_agent, message_content)
-    print_conversation(current_agent.name, response)
+    print_conversation(current_agent, response)
 
     # Update for next message
     current_agent, current_thread, message_content = determine_target_agent(response, current_agent, current_thread)
