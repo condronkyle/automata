@@ -1,5 +1,5 @@
 from client import Client
-from assistant import ProductManager, Engineer, TestEngineer
+from assistants import ProductManager, Engineer, TestEngineer
 from message import Message
 from utils import determine_target_agent, print_conversation
 
@@ -33,7 +33,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-print("x")
-

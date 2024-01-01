@@ -2,27 +2,38 @@ from thread import Thread
 from utils import send_message_and_get_response
 
 class Assistant:
-    def __init__(self, client, name, instructions, model):
+    def __init__(self, client, name, instructions, model, assistant_id=None):
         self.client = client
         self.name = name
         self.instructions = instructions
         self.model = model
-        self.assistant_id = None
-        self.thread_id = None
-        self.create_assistant()
+        self.assistant_id = assistant_id or self.create_assistant()
+        self.thread = Thread(client)  # Associate a Thread instance with each Assistant
+
+        if assistant_id:
+            self.fetch_assistant_details()
 
     def create_assistant(self):
-        if not self.assistant_id:
-            assistant = self.client.client.beta.assistants.create(
-                name=self.name,
-                instructions=self.instructions,
-                model=self.model
-            )
-            self.assistant_id = assistant.id
-            self.thread_id = self.client.client.beta.threads.create().id
+        assistant = self.client.client.beta.assistants.create(
+            name=self.name,
+            instructions=self.instructions,
+            model=self.model
+        )
+        return assistant.id
 
-    def send_message_and_get_response(self, thread_id, message_content):
-        return send_message_and_get_response(self.client.client, thread_id, self.assistant_id, message_content)
+    def fetch_assistant_details(self):
+        # Fetch and set the assistant details based on the existing assistant_id
+        # Note: You might need to use an appropriate method from the client API
+        # to retrieve the details of an assistant. This is a placeholder.
+        assistant_details = self.client.client.beta.assistants.retrieve(
+            assistant_id=self.assistant_id
+        )
+        # Assuming the API returns details that can be used to set up the assistant
+        self.instructions = assistant_details.instructions
+        self.model = assistant_details.model
+
+    def send_message_and_get_response(self, message_content):
+        return send_message_and_get_response(self.client.client, self.thread.thread_id, self.assistant_id, message_content)
 
     def is_final_agent(self):
         return self.name == "K"  # Assuming 'K' is the final agent in the workflow
