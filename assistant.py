@@ -1,4 +1,4 @@
-from thread import thread
+from thread import Thread
 from utils import send_message_and_get_response
 
 class Assistant:
