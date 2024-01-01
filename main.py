@@ -1,35 +1,43 @@
+import json
 from client import Client
 from assistants import ProductManager, Engineer, TestEngineer
 from message import Message
 from utils import determine_target_agent, print_conversation
+from thread import Thread
 
-def main():
+def main(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+
+    assistant_ids = config.get("assistant_ids", {})
+    thread_ids = config.get("thread_ids", {})
+
     client = Client()
-    product_manager = ProductManager(client)
-    engineer = Engineer(client)
-    test_engineer = TestEngineer(client)
 
-    # Create a dictionary of agents
-    agents_dict = {
-        "P": product_manager,
-        "E": engineer,
-        "T": test_engineer,
-        # Add other agents if necessary
-    }
+    # Initialize assistants
+    product_manager = ProductManager(client, assistant_id=assistant_ids.get("P"))
+    engineer = Engineer(client, assistant_id=assistant_ids.get("E"))
+    test_engineer = TestEngineer(client, assistant_id=assistant_ids.get("T"))
+
+    # Initialize threads
+    product_manager.thread = Thread(client, thread_id=thread_ids.get("P"))
+    engineer.thread = Thread(client, thread_id=thread_ids.get("E"))
+    test_engineer.thread = Thread(client, thread_id=thread_ids.get("T"))
 
     current_agent = product_manager
-    current_thread = product_manager.thread_id
+    current_thread = product_manager.thread.thread_id
     message_content = Message.initial_prompt()
 
     while not current_agent.is_final_agent():
-        response = current_agent.send_message_and_get_response(current_thread, message_content)
+        response = current_agent.send_message_and_get_response(message_content)
         print_conversation(current_agent, response)
 
         # Process the response to get the actual message content
         message_content = Message.extract_delivery_message(response)
 
         # Determine the next target agent and thread based on the response
-        current_agent, current_thread, message_content = determine_target_agent(response, current_agent, agents_dict)
+        current_agent, current_thread, message_content = determine_target_agent(response, current_agent)
 
 if __name__ == "__main__":
-    main()
+    config_file = 'config.json'
+    main(config_file)
