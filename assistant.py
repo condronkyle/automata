@@ -81,7 +81,7 @@ class TestEngineer(Assistant):
         super().__init__(
             client,
             "T",
-            """You are a phenomenal senior engineer, focused on testing.
+            """You are a phenomenal senior engineer, focused on designing software systems that use modern best practices. You also are quick to deliver highly functional code.
             You work very closely with E, another senior engineer.
             E will provide you with code to run with your code interpreter and test.
             You are expected to be smart and independent - if certain parts of the code cannot be run in your system, you can mock those parts, but please let E know if you had to do so.

@@ -1,12 +1,12 @@
 {
     "assistant_ids": {
-        "P": None,
-        "E": None,
-        "T": None
+        "P": null,
+        "E": null,
+        "T": null
     },
     "thread_ids": {
-        "P": None,
-        "E": None,
-        "T": None
+        "P": null,
+        "E": null,
+        "T": null
     }
 }
