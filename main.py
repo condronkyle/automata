@@ -11,6 +11,8 @@ def main(config_file):
 
     assistant_ids = config.get("assistant_ids", {})
     thread_ids = config.get("thread_ids", {})
+    initial_prompt = config.get("initial_prompt", "")
+
 
     client = Client()
 
@@ -26,17 +28,17 @@ def main(config_file):
 
     current_agent = product_manager
     current_thread = product_manager.thread.thread_id
-    message_content = Message.initial_prompt()
+    message = Message(initial_prompt
 
     while not current_agent.is_final_agent():
-        response = current_agent.send_message_and_get_response(message_content)
+        response = current_agent.send_message_and_get_response(message.content)
         print_conversation(current_agent, response)
 
         # Process the response to get the actual message content
-        message_content = Message.extract_delivery_message(response)
+        message.content = message.extract_delivery_message()
 
         # Determine the next target agent and thread based on the response
-        current_agent, current_thread, message_content = determine_target_agent(response, current_agent)
+        current_agent, current_thread, message = determine_target_agent(message.content, response, current_agent)
 
 if __name__ == "__main__":
     config_file = 'config.json'

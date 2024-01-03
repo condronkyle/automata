@@ -37,8 +37,32 @@ def poll_for_response(client, thread_id, run_id, max_attempts=30, delay=10):
 
 # Function to determine the targeted agent from a message
 def determine_target_agent(message, current_agent, agents_dict):
+    if '[To E]' in message:
+        return agents_dict["E"], agents_dict["E"].thread_id, message.e
+    # bug for when E tries to multitask
+    elif ('[To P]' in message) and ('[To T]' in message):
+        return agent, thread, "You can only message one person at a time. Send your code to T for testing."
+    elif '[To P]' in message:
+        return agents_dict["P"], agents_dict["P"].thread_id, message
+    elif '[To T]' in message:
+        # Send T the whole message
+        return assistant_t, thread_t, message
+    elif '[To K]' in message:
+        return 'K', 'K', extract_delivery_message(message)
+    else:
+        return agent, thread, "<your own internal monologue>: Continue. And remember, you must always end your response with a message to your teammates by using [To <X>]."
+        # TODO: Logic to re-prompt for more info
+
     pattern = r"\[To (E|P|T|K)\]"
-    match = re.search(pattern, message)
+    matches = re.findall(pattern, message)
+
+    if len(matches) > 1:
+        return current_agent, current_agent.thread_id, "You can only message one person at a time. Send your code to T for testing."
+    elif matches:
+        target = matches[0]
+        # Process the target
+    else:
+        print("No matches found.")
 
     if match:
         target = match.group(1)

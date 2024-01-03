@@ -8,5 +8,6 @@
         "P": null,
         "E": null,
         "T": null
-    }
+    },
+    "initial_prompt": "Can you create a basic local database system to track information about restaurants, chefs, and dishes. Please also create a locally hosted UI to edit, query, and update these tables."
 }
