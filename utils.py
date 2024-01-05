@@ -38,15 +38,15 @@ def poll_for_response(client, thread_id, run_id, max_attempts=30, delay=10):
 # Function to determine the targeted agent from a message
 def determine_target_agent(message, current_agent, agents_dict):
     if '[To E]' in message:
-        return agents_dict["E"], agents_dict["E"].thread_id, message.e
+        return agents_dict["E"], agents_dict["E"].thread_id, message.extract_delivery_message()
     # bug for when E tries to multitask
     elif ('[To P]' in message) and ('[To T]' in message):
         return agent, thread, "You can only message one person at a time. Send your code to T for testing."
     elif '[To P]' in message:
-        return agents_dict["P"], agents_dict["P"].thread_id, message
+        return agents_dict["P"], agents_dict["P"].thread_id, message.extract_delivery_message()
     elif '[To T]' in message:
         # Send T the whole message
-        return assistant_t, thread_t, message
+        return agents_dict["T"], agents_dict["T"].thread_id, message.extract_delivery_message()
     elif '[To K]' in message:
         return 'K', 'K', extract_delivery_message(message)
     else:
