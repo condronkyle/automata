@@ -28,17 +28,15 @@ def main(config_file):
 
     current_agent = product_manager
     current_thread = product_manager.thread.thread_id
-    message = Message(initial_prompt
+    message_content = Message(initial_prompt).content
 
     while not current_agent.is_final_agent():
-        response = current_agent.send_message_and_get_response(message.content)
+        response = current_agent.send_message_and_get_response(message_content)
         print_conversation(current_agent, response)
 
-        # Process the response to get the actual message content
-        message.content = message.extract_delivery_message()
-
+        new_message = Message(response)
         # Determine the next target agent and thread based on the response
-        current_agent, current_thread, message = determine_target_agent(message.content, response, current_agent)
+        current_agent, current_thread, message_content = determine_target_agent(new_message, current_agent, assistant_ids, current_thread)
 
 if __name__ == "__main__":
     config_file = 'config.json'

@@ -38,19 +38,19 @@ def poll_for_response(client, thread_id, run_id, max_attempts=30, delay=10):
 # Function to determine the targeted agent from a message
 def determine_target_agent(message, current_agent, agents_dict):
     if '[To E]' in message:
-        return agents_dict["E"], agents_dict["E"].thread_id, message.extract_delivery_message()
+        return agents_dict["E"], agents_dict["E"].thread.thread_id, message.extract_delivery_message()
     # bug for when E tries to multitask
     elif ('[To P]' in message) and ('[To T]' in message):
-        return agent, thread, "You can only message one person at a time. Send your code to T for testing."
+        return agents_dict["E"], agents_dict["E"].thread.thread_id, "You can only message one person at a time. Send your entire code to T for testing."
     elif '[To P]' in message:
-        return agents_dict["P"], agents_dict["P"].thread_id, message.extract_delivery_message()
+        return agents_dict["P"], agents_dict["P"].thread.thread_id, message.extract_delivery_message()
     elif '[To T]' in message:
         # Send T the whole message
-        return agents_dict["T"], agents_dict["T"].thread_id, message.extract_delivery_message()
+        return agents_dict["T"], agents_dict["T"].thread.thread_id, message.content
     elif '[To K]' in message:
-        return 'K', 'K', extract_delivery_message(message)
+        return 'K', 'K', message.extract_delivery_message()
     else:
-        return agent, thread, "<your own internal monologue>: Continue. And remember, you must always end your response with a message to your teammates by using [To <X>]."
+        return current_agent, current_agent.thread.thread_id, "This is the manager stepping in. Go ahead and do the work in your next message, and send it to your relevant teammate. And remember, you must always end your response with a message to one of your teammates by using [To <X>]."
         # TODO: Logic to re-prompt for more info
 
     pattern = r"\[To (E|P|T|K)\]"
