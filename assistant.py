@@ -39,7 +39,7 @@ class Assistant:
         return self.name == "K"  # Assuming 'K' is the final agent in the workflow
 
 class ProductManager(Assistant):
-    def __init__(self, client):
+    def __init__(self, client, assistant_id=None):
         super().__init__(
             client,
             "P",
@@ -52,11 +52,12 @@ class ProductManager(Assistant):
             It is a requirement of our systems that you keep the conversation going, so you must always ultimately send information to E in your response.
             Additionally, don't ever tell anyone you will wait for them to get back to you. Always ensure you are specifically asking them to give a response to you.
             If E is giving general status updates, do not encourage this. Tell him to stop messaging you, and instead write code and send it to T.""",
-            "gpt-4-1106-preview"
+            "gpt-4-1106-preview",
+            assistant_id=assistant_id
         )
 
 class Engineer(Assistant):
-    def __init__(self, client):
+    def __init__(self, client, assistant_id=None):
         super().__init__(
             client,
             "E",
@@ -73,11 +74,12 @@ class Engineer(Assistant):
             If E seems to not be working, or if E responds but does not send you code, ask him to write code and send it to you.
             If E says he will test on his own, remind him that only you have the full testing suite and he should send the code to you instead.
             If E asks you to test something but doesn't send you the code, remind him to send you the code.""",
-            "gpt-4-1106-preview"
+            "gpt-4-1106-preview",
+            assistant_id=assistant_id
         )
 
 class TestEngineer(Assistant):
-    def __init__(self, client):
+    def __init__(self, client, assistant_id=None):
         super().__init__(
             client,
             "T",
@@ -94,5 +96,6 @@ class TestEngineer(Assistant):
             If E seems to not be working, or if E responds but does not send you code, ask him to write code and send it to you.
             If E says he will test on his own, remind him that only you have the full testing suite and he should send the code to you instead.
             If E asks you to test something but doesn't send you the code, remind him to send you the code.""",
-            "gpt-4-1106-preview"
+            "gpt-4-1106-preview",
+            assistant_id=assistant_id
         )

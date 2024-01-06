@@ -1,6 +1,9 @@
 import time
 import re
 
+#TODO: Add Senior Eng PR Review assistant
+#TODO: Use json api or function api to store code
+
 # Function to create a message in the thread and get a response
 def send_message_and_get_response(client, thread_id, assistant_id, content):
     # Create a message in the specified thread
