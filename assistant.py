@@ -7,11 +7,12 @@ class Assistant:
         self.name = name
         self.instructions = instructions
         self.model = model
-        self.assistant_id = assistant_id or self.create_assistant()
         self.thread = Thread(client)  # Associate a Thread instance with each Assistant
 
         if assistant_id:
             self.fetch_assistant_details()
+
+        self.assistant_id = assistant_id or self.create_assistant()
 
     def create_assistant(self):
         assistant = self.client.client.beta.assistants.create(
