@@ -3,7 +3,6 @@ from client import Client
 from assistant import ProductManager, Engineer, TestEngineer
 from message import Message
 from utils import determine_target_agent, print_conversation
-from thread import Thread
 
 def main(config_file):
     with open(config_file, 'r') as file:
@@ -13,18 +12,17 @@ def main(config_file):
     thread_ids = config.get("thread_ids", {})
     initial_prompt = config.get("initial_prompt", "")
 
-
     client = Client()
 
-    # Initialize assistants
-    product_manager = ProductManager(client, assistant_id=assistant_ids.get("P"))
-    engineer = Engineer(client, assistant_id=assistant_ids.get("E"))
-    test_engineer = TestEngineer(client, assistant_id=assistant_ids.get("T"))
+    # Initialize assistants and threads
+    product_manager = ProductManager(client, assistant_id=assistant_ids.get("P"), thread_id=thread_ids.get("P"))
+    engineer = Engineer(client, assistant_id=assistant_ids.get("E"), thread_id=thread_ids.get("E"))
+    test_engineer = TestEngineer(client, assistant_id=assistant_ids.get("T"), thread_id=thread_ids.get("T"))
 
-    # Initialize threads
-    product_manager.thread = Thread(client, thread_id=thread_ids.get("P"))
-    engineer.thread = Thread(client, thread_id=thread_ids.get("E"))
-    test_engineer.thread = Thread(client, thread_id=thread_ids.get("T"))
+    agents_dict = {}
+    agents_dict["P"] = product_manager
+    agents_dict["E"] = engineer
+    agents_dict["T"] = test_engineer
 
     current_agent = product_manager
     current_thread = product_manager.thread.thread_id
@@ -36,7 +34,7 @@ def main(config_file):
 
         new_message = Message(response)
         # Determine the next target agent and thread based on the response
-        current_agent, current_thread, message_content = determine_target_agent(new_message, current_agent, assistant_ids)
+        current_agent, current_thread, message_content = determine_target_agent(new_message, current_agent, agents_dict)
 
 if __name__ == "__main__":
     config_file = 'config.json'
