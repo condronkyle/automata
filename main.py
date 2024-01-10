@@ -12,6 +12,10 @@ def main(config_file):
     thread_ids = config.get("thread_ids", {})
     initial_prompt = config.get("initial_prompt", "")
 
+    print(assistant_ids)
+    print(thread_ids)
+    print(initial_prompt)
+
     client = Client()
 
     # Initialize assistants and threads
