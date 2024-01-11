@@ -61,20 +61,20 @@ def determine_target_agent(message, current_agent, agents_dict):
     pattern = r"\[To (E|P|T|K)\]"
     matches = re.findall(pattern, message)
 
-    if len(matches) > 1:
-        return current_agent, current_agent.thread_id, "You can only message one person at a time. Send your code to T for testing."
-    elif matches:
-        target = matches[0]
-        # Process the target
-    else:
-        print("No matches found.")
+    # if len(matches) > 1:
+    #     return current_agent, current_agent.thread_id, "You can only message one person at a time. Send your code to T for testing."
+    # elif matches:
+    #     target = matches[0]
+    #     # Process the target
+    # else:
+    #     print("No matches found.")
 
-    if match:
-        target = match.group(1)
-        # Select the target agent from the dictionary
-        if target in agents_dict:
-            target_agent = agents_dict[target]
-            return target_agent, target_agent.thread_id, message
+    # if match:
+    #     target = match.group(1)
+    #     # Select the target agent from the dictionary
+    #     if target in agents_dict:
+    #         target_agent = agents_dict[target]
+    #         return target_agent, target_agent.thread_id, message
 
     # Default to current agent if no target is found
     return current_agent, current_agent.thread_id, message

@@ -28,6 +28,11 @@ def main(config_file):
     agents_dict["E"] = engineer
     agents_dict["T"] = test_engineer
 
+    for name, agent in agents_dict.items():
+        print(name + ":")
+        print(agent.assistant_id)
+        print(agent.thread.thread_id)
+
     current_agent = product_manager
     current_thread = product_manager.thread.thread_id
     message_content = Message(initial_prompt).content
