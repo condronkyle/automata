@@ -19,6 +19,6 @@ class Message:
 
         # Getting everything after the split
         if split_index:
-            return self.content[split_index.end()+5:]
+            return self.content[split_index.end()+5:] + "And remember, don't tell me you ae going to work soon. Actually do the work in the next message!"
 
         raise Exception("An error occurred during delivery message extraction.")
