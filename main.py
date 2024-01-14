@@ -43,7 +43,7 @@ def main(config_file):
 
         new_message = Message(response)
         # Determine the next target agent and thread based on the response
-        current_agent, current_thread, message_content = determine_target_agent(new_message, current_agent, agents_dict)
+        current_agent, current_thread, message_content = current_agent.determine_target_agent(new_message, agents_dict)
 
 if __name__ == "__main__":
     config_file = 'config.json'

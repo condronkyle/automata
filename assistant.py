@@ -40,25 +40,25 @@ class Assistant:
         return self.name == "K"  # Assuming 'K' is the final agent in the workflow
 
     # Function to determine the targeted agent from a message
-def determine_target_agent(self, message, agents_dict):
-    #TODO switch statement for the diff current agents
-    content = message.content
-    if '[To E]' in content:
-        return agents_dict["E"], agents_dict["E"].thread.thread_id, message.extract_delivery_message()
-    # bug for when E tries to multitask
-    elif ('[To P]' in content) and ('[To T]' in content):
-        return agents_dict["E"], agents_dict["E"].thread.thread_id, "You can only message one person at a time. Send your entire code to T for testing."
-    elif '[To P]' in content:
-        return agents_dict["P"], agents_dict["P"].thread.thread_id, message.extract_delivery_message()
-    elif '[To T]' in content:
-        # Send T the whole message
-        return agents_dict["T"], agents_dict["T"].thread.thread_id, message.content
-    elif '[To K]' in content:
-        return 'K', 'K', message.extract_delivery_message()
-    else:
-        return self, self.thread.thread_id, "This is the manager stepping in. Go ahead and do the work in your next message, and send it to your relevant teammate. And remember, you must always end your response with a message to one of your teammates by using [To <X>]."
-        # TODO: Logic to re-prompt for more info
-        # TODO: switch on which agent
+    def determine_target_agent(self, message, agents_dict):
+        #TODO switch statement for the diff current agents
+        content = message.content
+        if '[To E]' in content:
+            return agents_dict["E"], agents_dict["E"].thread.thread_id, message.extract_delivery_message()
+        # bug for when E tries to multitask
+        elif ('[To P]' in content) and ('[To T]' in content):
+            return agents_dict["E"], agents_dict["E"].thread.thread_id, "You can only message one person at a time. Send your entire code to T for testing."
+        elif '[To P]' in content:
+            return agents_dict["P"], agents_dict["P"].thread.thread_id, message.extract_delivery_message()
+        elif '[To T]' in content:
+            # Send T the whole message
+            return agents_dict["T"], agents_dict["T"].thread.thread_id, message.content
+        elif '[To K]' in content:
+            return 'K', 'K', message.extract_delivery_message()
+        else:
+            return self, self.thread.thread_id, "This is the manager stepping in. Go ahead and do the work in your next message, and send it to your relevant teammate. And remember, you must always end your response with a message to one of your teammates by using [To <X>]."
+            # TODO: Logic to re-prompt for more info
+            # TODO: switch on which agent
 
     
 class ProductManager(Assistant):
