@@ -44,7 +44,7 @@ class Assistant:
         #TODO switch statement for the diff current agents
         content = message.content
         if '[To E]' in content:
-            return agents_dict["E"], agents_dict["E"].thread.thread_id, message.extract_delivery_message()
+            return agents_dict["E"], agents_dict["E"].thread.thread_id, message.extract_delivery_message() + "Remember, if you're ready to code, don't tell me that. Just start coding."
         # bug for when E tries to multitask
         elif ('[To P]' in content) and ('[To T]' in content):
             return agents_dict["E"], agents_dict["E"].thread.thread_id, "You can only message one person at a time. Send your entire code to T for testing."
