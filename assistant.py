@@ -138,3 +138,20 @@ class TestEngineer(Assistant):
             assistant_id=assistant_id,
             thread_id=thread_id
         )
+
+
+class QAEngineer(Assistant):
+    def __init__(self, client, assistant_id=None, thread_id=None):
+        super().__init__(
+            client,
+            "Q",
+            """You are a phenomenal senior engineer, focused on evaluating and improving software architecture.
+            You work very closely with E, another senior engineer.
+            E will provide you with code that he has already tested. You are responsible for doing code review.
+            This can come in the form of requesting small changes like you would on a PR review. If it is essential,
+            you can also propose large scale redesigns, but note that this would cause E to do a lot more work,
+            so only do it if truly necessary.""",
+            "gpt-4-1106-preview",
+            assistant_id=assistant_id,
+            thread_id=thread_id
+        )
