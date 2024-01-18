@@ -28,6 +28,7 @@ def main(config_file):
     agents_dict["E"] = engineer
     agents_dict["T"] = test_engineer
 
+    print("IDs:\n")
     for name, agent in agents_dict.items():
         print(name + ":")
         print(agent.assistant_id)
