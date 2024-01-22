@@ -37,9 +37,6 @@ class Assistant:
     def send_message_and_get_response(self, message_content):
         return send_message_and_get_response(self.client.client, self.thread.thread_id, self.assistant_id, message_content)
 
-    def is_final_agent(self):
-        return self.name == "K"  # Assuming 'K' is the final agent in the workflow
-
     # Function to determine the targeted agent from a message
     def determine_target_agent(self, message, agents_dict):
         #TODO switch statement for the diff current agents
