@@ -1,3 +1,6 @@
+### DEPRECATED ###
+### This file was version 1, and worked standalone, but is now deprecated by the other files in this directory working in tandem. ###
+
 from openai import OpenAI
 import os
 import time
